@@ -189,3 +189,26 @@ let teacherSummary = document.getElementById("name-summary") as HTMLSelectElemen
 
 initSelect();
 
+function createTableData(obj: unknown, grade: string): void {
+    const tableBody = ((document.querySelector("#table") as HTMLTableElement).lastElementChild as HTMLElement);
+    const tr = document.createElement("TR") as HTMLElement;
+    for (let i = 0, objValue = Object.entries(obj as object); i < Object.keys(obj as object).length; i++) {
+        let td = document.createElement("TD") as HTMLElement;
+        td.textContent = objValue[i][1];
+        td.classList.add("px-5", "border-2", "border-slate-900")
+        tr.append(td);
+        console.log(grade);
+    };
+
+    let td = document.createElement("TD") as HTMLElement;
+    td.textContent = grade;
+    td.classList.add("px-5", "border-2", "border-slate-900");
+    tr.append(td);
+
+    grade === "Aprobado" ?
+    td.classList.add("bg-green-900") :
+    td.classList.add("bg-red-900"); 
+
+
+    tableBody.append(tr);
+};

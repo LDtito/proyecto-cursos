@@ -153,3 +153,24 @@ function initSelect() {
     });
 }
 initSelect();
+function createTableData(obj, grade) {
+    const tableBody = document.querySelector("#table").lastElementChild;
+    const tr = document.createElement("TR");
+    for (let i = 0, objValue = Object.entries(obj); i < Object.keys(obj).length; i++) {
+        let td = document.createElement("TD");
+        td.textContent = objValue[i][1];
+        td.classList.add("px-5", "border-2", "border-slate-900");
+        tr.append(td);
+        console.log(grade);
+    }
+    ;
+    let td = document.createElement("TD");
+    td.textContent = grade;
+    td.classList.add("px-5", "border-2", "border-slate-900");
+    tr.append(td);
+    grade === "Aprobado" ?
+        td.classList.add("bg-green-900") :
+        td.classList.add("bg-red-900");
+    tableBody.append(tr);
+}
+;
