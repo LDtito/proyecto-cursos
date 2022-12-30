@@ -1,6 +1,7 @@
 import { Activity } from "./entities/activity";
 import { Course } from "./entities/course";
 import { GradeBookSetup} from "./entities/gradeBookSeutp";
+import { reportGradesDTO } from "./entities/reportGrades";
 import { Student } from "./entities/student";
 import { SummaryGrades} from "./entities/SummaryGrades";
 import { Teacher } from "./entities/teacher";
@@ -74,7 +75,7 @@ function addCourse(): void {
 
 function addGradeBookSetup(): void {
     let currentGradeBookSetup: GradeBookSetup = {
-        value: readFormHtml("value-gradebook"),
+        value: parseInt(readFormHtml("value-gradebook")),
         course: readFormHtml("course-gradebook"),
         activity: readFormHtml("activity-gradebook"),
         maximunGrade: parseInt(readFormHtml("maximungrade-gradebook")),
@@ -189,26 +190,54 @@ let teacherSummary = document.getElementById("name-summary") as HTMLSelectElemen
 
 initSelect();
 
-function createTableData(obj: unknown, grade: string): void {
-    const tableBody = ((document.querySelector("#table") as HTMLTableElement).lastElementChild as HTMLElement);
-    const tr = document.createElement("TR") as HTMLElement;
-    for (let i = 0, objValue = Object.entries(obj as object); i < Object.keys(obj as object).length; i++) {
-        let td = document.createElement("TD") as HTMLElement;
-        td.textContent = objValue[i][1];
-        td.classList.add("px-5", "border-2", "border-slate-900")
-        tr.append(td);
-        console.log(grade);
-    };
+class ReporteCalificaciones{
 
-    let td = document.createElement("TD") as HTMLElement;
-    td.textContent = grade;
-    td.classList.add("px-5", "border-2", "border-slate-900");
-    tr.append(td);
+    constructor(public students:Student[],
+                public teachers:Teacher[],
+                public activities:Activity[],
+                public courses:Course[],
+                public gradesBookSetup: GradeBookSetup[],
+                public summaryGrades: SummaryGrades[]){
+        }
+    
+    public createGradeBookDTO():reportGradesDTO[]{
+        let reportGradeBookDTO:reportGradesDTO[]=[];
 
-    grade === "Aprobado" ?
-    td.classList.add("bg-green-900") :
-    td.classList.add("bg-red-900"); 
+        this.summaryGrades.forEach(
+            (grade) => {
+            let LibroCalificacionesActual = gradesBookSetup.filter((gradeBookSetup)=>gradeBookSetup.value === grade.value)[0];
+            let studentActual = students.filter((student)=>student.fullName === grade.name) [0];
+            {
+                //ReportGradeBook
+                student: "",
+                course: "",
+                //Student
+                enrollment: 0,
+                level: "",
+                fullName: "",
+                identification: 0,
+                mail: "",
+                direction: "",
+                //Teacher
+                title:"",
+                area: "",
+                //Activity
+                name: "",
+                //gradeBookSetup
+                value: 0,
+                activity: "",
+                maximunGrade: 0,
+                //SummaryGrades
+                teacher: ""
+            }
+        }
 
+    }
+    return reportGradeBookDTO;
+}
 
-    tableBody.append(tr);
-};
+function generateReport(){
+    let repteCal:ReporteCalificaciones = new ReporteCalificaciones(
+        students,teachers,activities,courses,gradesBookSetup,summaryGrades
+    )
+}

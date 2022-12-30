@@ -1,5 +1,5 @@
 export interface GradeBookSetup{
-    value:string;
+    value:number;
     course:string;
     activity:string;
     maximunGrade:number;
